@@ -1,13 +1,8 @@
-import Models.DAO.*;
-import Views.*;
+import Views.Frames.Game;
 
 public class App {
     public static void main(String[] args) throws Exception {
 
-        Menu menu = new Menu();
-        UserDAO user = new UserDAO();
-
-        
-
+        Game game = new Game();
     }
 }

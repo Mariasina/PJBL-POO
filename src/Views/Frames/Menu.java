@@ -1,4 +1,4 @@
-package Views;
+package Views.Frames;
 import Controllers.UserController;
 import Models.Entity.User;
 import java.awt.event.ActionEvent;
