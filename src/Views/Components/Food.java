@@ -12,13 +12,20 @@ public class Food extends JComponent{
 
     public Food(){
         Random generator = new Random();
-        this.x = generator.nextInt(1000);
-        this.y = generator.nextInt(700);
+        this.x = (generator.nextInt(1000 - size)) - 10;
+        this.y = (generator.nextInt(700 - size)) - 10;
         this.points = 5;
         this.size = 20;
 
         System.out.println(x);
         System.out.println(y);
+    }
+
+    public void respawn(){
+        Random generator = new Random();
+        this.x =(generator.nextInt(1000 - size)) - 10;
+        this.y = (generator.nextInt(700 - size)) - 10;
+        repaint();
     }
 
     @Override
@@ -28,19 +35,19 @@ public class Food extends JComponent{
         g.fillOval(x, y, size, size);
     }
 
-    public int getX() {
+    public int getFoodX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setFoodX(int x) {
         this.x = x;
     }
 
-    public int getY() {
+    public int getFoodY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setFoodY(int y) {
         this.y = y;
     }
 
@@ -50,6 +57,14 @@ public class Food extends JComponent{
 
     public void setPoints(int points) {
         this.points = points;
+    }
+
+    public int getFoodSize() {
+        return size;
+    }
+
+    public void setFoodSize(int size) {
+        this.size = size;
     }   
     
 }
