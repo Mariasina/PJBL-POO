@@ -7,24 +7,68 @@ import java.util.List;
 import Models.GenericDAO;
 import Models.Entity.User;
 
-public class UserDAO extends GenericDAO {
+public class UserDAO extends GenericDAO<User> {
 
-    public void registerUser(User user) throws SQLException {
+    @Override
+    public void save(User user) throws SQLException {
         String sql = "INSERT INTO User (username, user_password) VALUES (?, ?)";
-        save(sql, user.getUsername(), user.getUserPassword());
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             
+            pstmt.setString(1, user.getUsername());
+            pstmt.setString(2, user.getUserPassword());
+            pstmt.execute();
+        }
     }
 
-    public void alterUser(User user) throws SQLException {
+    @Override
+    public void update(User user) throws SQLException {
         String sql = "UPDATE User SET username = ?, user_password = ? WHERE id = ?";
-        update(sql, user.getId(), user.getUsername());
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             
+            pstmt.setString(1, user.getUsername());
+            pstmt.setString(2, user.getUserPassword());
+            pstmt.setLong(3, user.getId());
+            pstmt.execute();
+        }
     }
 
-    public void deleteUser(long id) throws SQLException {
+    @Override
+    public void delete(long id) throws SQLException {
         String sql = "DELETE FROM User WHERE id = ?";
-        delete(sql, id);
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             
+            pstmt.setLong(1, id);
+            pstmt.execute();
+        }
     }
 
-    public List<User> findUsers() throws SQLException {
+    @Override
+    public User findById(long id) throws SQLException {
+        String sql = "SELECT * FROM User WHERE id = ?";
+        User user = null;
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             
+            stmt.setLong(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    user = new User();
+                    user.setId(rs.getLong("id"));
+                    user.setUsername(rs.getString("username"));
+                    user.setUserPassword(rs.getString("user_password"));
+                }
+            }
+        }
+
+        return user;
+    }
+
+    @Override
+    public List<User> findAll() throws SQLException {
         List<User> users = new ArrayList<>();
         String sql = "SELECT * FROM User";
 
@@ -36,6 +80,7 @@ public class UserDAO extends GenericDAO {
                 User user = new User();
                 user.setId(rs.getLong("id"));
                 user.setUsername(rs.getString("username"));
+                user.setUserPassword(rs.getString("user_password"));
                 users.add(user);
             }
         }
@@ -56,6 +101,7 @@ public class UserDAO extends GenericDAO {
                     user = new User();
                     user.setId(rs.getLong("id"));
                     user.setUsername(rs.getString("username"));
+                    user.setUserPassword(rs.getString("user_password"));
                 }
             }
         }

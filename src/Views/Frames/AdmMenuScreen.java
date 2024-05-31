@@ -70,7 +70,7 @@ public class AdmMenuScreen extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e){
                 AdmMenuScreen.this.setVisible(false);
-                GameScreen game = new GameScreen();
+                
             }
         });
 

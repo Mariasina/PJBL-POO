@@ -6,6 +6,8 @@ import javax.swing.*;
 
 import Views.Components.Food;
 import Views.Components.Snake;
+import Models.Entity.User;
+import Views.Components.TextPanel;
 
 public class GameScreen extends JFrame implements KeyListener {
     private int score;
@@ -14,8 +16,9 @@ public class GameScreen extends JFrame implements KeyListener {
     private Snake snake;
     private Food food;
     private Timer timer;
+    private TextPanel scorePanel;
 
-    public GameScreen() {
+    public GameScreen(User user) {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(1000, 700);
         getContentPane().setBackground(new Color(117, 237, 92));
@@ -33,9 +36,13 @@ public class GameScreen extends JFrame implements KeyListener {
         snake.setBounds(0, 0, 1000, 700);
         food.setBounds(0, 0, 1000, 700);
 
+        // Inicializa scorePanel com valor inicial
+        scorePanel = new TextPanel("Score: 0");
+        scorePanel.setBounds(10, 10, 200, 30); // Define o tamanho e posição do painel de pontuação
+
         this.add(food);
         this.add(snake);
-        
+        this.add(scorePanel);
 
         ActionListener gameLoop = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -57,8 +64,9 @@ public class GameScreen extends JFrame implements KeyListener {
                  }
 
                 System.out.println("Score: " + score);
+                scorePanel.setText("Score: " + score); // Atualiza o texto do painel de pontuação
+                scorePanel.repaint();
             }
-
         };
 
         timer = new Timer(50, gameLoop);
@@ -106,9 +114,5 @@ public class GameScreen extends JFrame implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         // Não utilizado, mas precisa estar aqui devido à interface KeyListener
-    }
-
-    public static void main(String[] args) {
-        new GameScreen();
     }
 }

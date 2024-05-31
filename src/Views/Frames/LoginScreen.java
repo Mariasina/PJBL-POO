@@ -10,16 +10,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class RegisterScreen extends JFrame {
+public class LoginScreen extends JFrame {
     private JTextField tfUser;
     private JTextField tfPassword;
-    private List<User> userList;
     private JPanel userPanel;
 
-    public RegisterScreen() {
-        userList = new UserController().listUsers();
+    public LoginScreen() {
         this.setTitle("Login");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(500, 500);
@@ -38,21 +37,27 @@ public class RegisterScreen extends JFrame {
         tfUser = new JTextField("", 20);
         JLabel lbPassword = new JLabel("Senha:");
         tfPassword = new JTextField("", 20);
-        JButton btAdd = new JButton("Adicionar");
+        JButton btLogin = new JButton("Entrar");
         JButton btBack = new JButton("Voltar");
         JLabel lbRegistered = new JLabel("Usuários cadastrados:");
-        TextPanel title = new TextPanel("Cadastro");
+        TextPanel title = new TextPanel("Login");
+        JLabel lbRegister = new JLabel("Ainda não possuí um usuário?");
+        JButton btRegister = new JButton("Cadastrar");
 
         lbUser.setForeground(Color.WHITE);
         lbPassword.setForeground(Color.WHITE);
+        lbRegister.setForeground(Color.WHITE);
 
         // Configuração do painel de botões
         btAddPanel.setLayout(new BoxLayout(btAddPanel, BoxLayout.Y_AXIS));
         btBackPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); // Alinha à esquerda
 
         // Adicionar botões aos seus respectivos painéis
-        btAdd.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btAddPanel.add(btAdd);
+        btLogin.setAlignmentX(Component.CENTER_ALIGNMENT);
+        lbRegister.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btRegister.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        btAddPanel.add(btLogin);
         btAddPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 70, 10));
         btAddPanel.setBackground(new Color(37, 38, 37));
 
@@ -91,17 +96,12 @@ public class RegisterScreen extends JFrame {
         addPanel.add(title);
         addPanel.add(formPanel);
         addPanel.add(buttonsPanel);
+        addPanel.add(lbRegister);
+        addPanel.add(btRegister);
 
         // Configurações do painel de usuários registrados
         userPanel.setLayout(new BoxLayout(userPanel, BoxLayout.Y_AXIS));
         userPanel.add(lbRegistered);
-
-        // Adicionar usuários ao painel de usuários registrados
-        for (User currentUser : userList) {
-            JLabel lbUsername = new JLabel();
-            lbUsername.setText(currentUser.getUsername());
-            userPanel.add(lbUsername);
-        }
 
         // Adicionar espaçamento ao painel de botões
         addPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -119,55 +119,64 @@ public class RegisterScreen extends JFrame {
         btBack.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                RegisterScreen.this.setVisible(false);
+                LoginScreen.this.setVisible(false);
                 new MainMenu();
             }
         });
 
         // ActionListener para o botão Adicionar
-        btAdd.addActionListener(new ActionListener() {
+        btLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                onClickRegister();
-                RegisterScreen.this.setVisible(false);
+                onClickFind();
+                
+                
+            }
+        });
+
+        btRegister.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                LoginScreen.this.setVisible(false);
+                new RegisterScreen();
+                
             }
         });
     }
 
-    private void onClickRegister() {
+    private void onClickFind() {
         UserController cc = new UserController();
         try {
-            cc.register(tfUser.getText(), tfPassword.getText());
-            JOptionPane.showMessageDialog(this, "Usuário cadastrado!");
-            clearFields();
-            userList = new UserController().listUsers();
-            refreshUserList();
+            User c = cc.searchUsername(tfUser.getText());
+            if (c == null) {
+                JOptionPane.showMessageDialog(this, "Usuário não encontrado!");
+                clearFields();
+                return;
+            }
+            String pass = c.getUserPassword();
+            if (pass.equals(tfPassword.getText())) {
+                LoginScreen.this.setVisible(false);
+                new GameScreen(c);
+            } else {
+                JOptionPane.showMessageDialog(this, "Senha incorreta!");
+                clearFields();
+            }
+            
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this,
-                "Nao foi possivel salvar usuário!" +
+            JOptionPane.showMessageDialog(this, 
+                "Ocorreu um erro, tente novamente!\n" + 
                 e.getLocalizedMessage()
             );
-        } catch (ParseException e) {
-            JOptionPane.showMessageDialog(this,
-                "Data possui formato inválido!\n" +
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(this, 
+                "Contato não localizado ou não existe!\n" + 
                 e.getLocalizedMessage()
             );
         }
     }
+    
 
     private void clearFields() {
-        tfUser.setText("");
         tfPassword.setText("");
-    }
-
-    private void refreshUserList() {
-        userPanel.removeAll();
-        userPanel.add(new JLabel("Usuários cadastrados:"));
-        for (User currentUser : userList) {
-            JLabel lbUsername = new JLabel(currentUser.getUsername());
-            userPanel.add(lbUsername);
-        }
-        userPanel.revalidate();
-        userPanel.repaint();
     }
 }

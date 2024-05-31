@@ -14,7 +14,7 @@ public class UserController {
         User.setUsername(username);
         User.setUserPassword(user_password);
 
-        new UserDAO().registerUser(User);
+        new UserDAO().save(User);
     }
 
     public void alter(long id, String username, String user_password) throws ParseException, SQLException {
@@ -23,17 +23,17 @@ public class UserController {
         User.setUsername(username);
         User.setUserPassword(user_password);
 
-        new UserDAO().alterUser(User);
+        new UserDAO().update(User);
     }
 
     public void delete(long id) throws SQLException {
-        new UserDAO().deleteUser(id);
+        new UserDAO().delete(id);
     }
 
     public List listUsers() {
         UserDAO dao = new UserDAO();
         try {
-            return dao.findUsers();
+            return dao.findAll();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, 
 				"Problemas ao localizar usuário" + 

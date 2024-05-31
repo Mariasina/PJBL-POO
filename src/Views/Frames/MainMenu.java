@@ -12,7 +12,7 @@ public class MainMenu extends JFrame{
         this.setTitle("Snake Game");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
-        this.setSize(400, 400);
+        this.setSize(500, 500);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         JPanel buttonsPanel = new JPanel();
@@ -42,7 +42,7 @@ public class MainMenu extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e){
                 MainMenu.this.setVisible(false);
-                RegisterScreen register = new RegisterScreen();
+                LoginScreen login = new LoginScreen();
             }
         });
     }   
