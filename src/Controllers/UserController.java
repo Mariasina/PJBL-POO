@@ -1,24 +1,27 @@
 package Controllers;
 
-import Models.DAO.UserDAO;
-import Models.Entity.User;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
 import javax.swing.JOptionPane;
 
+import Models.DAO.UserDAO;
+import Models.Entity.User;
+
 public class UserController {
-    public void register(String username) throws SQLException, ParseException {
+    public void register(String username, String user_password) throws SQLException, ParseException {
         User User = new User();
         User.setUsername(username);
+        User.setUserPassword(user_password);
 
         new UserDAO().registerUser(User);
     }
 
-    public void alter(long id, String username) throws ParseException, SQLException {
+    public void alter(long id, String username, String user_password) throws ParseException, SQLException {
 		User User = new User();
         User.setId(id);
         User.setUsername(username);
+        User.setUserPassword(user_password);
 
         new UserDAO().alterUser(User);
     }
@@ -39,6 +42,8 @@ public class UserController {
         }
         return null;
     }
+
+    
 
     public User searchUsername(String username) throws SQLException {
         UserDAO dao = new UserDAO();

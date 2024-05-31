@@ -1,20 +1,21 @@
 package Models.DAO;
 
-import Models.Entity.User;
-import Models.GenericDAO;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import Models.GenericDAO;
+import Models.Entity.User;
+
 public class UserDAO extends GenericDAO {
 
     public void registerUser(User user) throws SQLException {
-        String sql = "INSERT INTO User (username) VALUES (?)";
-        save(sql, user.getUsername());
+        String sql = "INSERT INTO User (username, user_password) VALUES (?, ?)";
+        save(sql, user.getUsername(), user.getUserPassword());
     }
 
     public void alterUser(User user) throws SQLException {
-        String sql = "UPDATE User SET username = ? WHERE id = ?";
+        String sql = "UPDATE User SET username = ?, user_password = ? WHERE id = ?";
         update(sql, user.getId(), user.getUsername());
     }
 

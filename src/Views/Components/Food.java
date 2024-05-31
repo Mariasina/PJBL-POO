@@ -12,8 +12,8 @@ public class Food extends JComponent{
 
     public Food(){
         Random generator = new Random();
-        this.x = (generator.nextInt(1000 - size)) - 10;
-        this.y = (generator.nextInt(700 - size)) - 10;
+        this.x = (generator.nextInt(900 - size)) - 10;
+        this.y = (generator.nextInt(500 - size)) - 10;
         this.points = 5;
         this.size = 20;
 
@@ -23,8 +23,8 @@ public class Food extends JComponent{
 
     public void respawn(){
         Random generator = new Random();
-        this.x =(generator.nextInt(1000 - size)) - 10;
-        this.y = (generator.nextInt(700 - size)) - 10;
+        this.x =(generator.nextInt(900 - size)) - 10;
+        this.y = (generator.nextInt(600 - size)) - 10;
         repaint();
     }
 
