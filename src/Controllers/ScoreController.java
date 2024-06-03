@@ -1,8 +1,8 @@
 package Controllers;
 
 import Models.DAO.ScoreDAO;
-import Models.Entity.Score;
 import Models.Entity.User;
+import Models.Entity.Score;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
@@ -18,7 +18,7 @@ public class ScoreController {
     }
 
     public void alter(long id, int value, User user) throws ParseException, SQLException {
-		Score score = new Score();
+        Score score = new Score();
         score.setId(id);
         score.setValue(value);
         score.setIdUser(user);
@@ -30,15 +30,14 @@ public class ScoreController {
         new ScoreDAO().delete(id);  
     }
 
-    public List listScores() {
+    public List<Score> listScores() {
         ScoreDAO dao = new ScoreDAO();
         try {
-            return dao.findAll();
+            return dao.findAllOrderedByValue();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, 
-				"Problemas ao localizar score" + 
-				e.getLocalizedMessage()
-			);
+            JOptionPane.showMessageDialog(null,
+                "Problemas ao localizar score: " + e.getLocalizedMessage()
+            );
         }
         return null;
     }

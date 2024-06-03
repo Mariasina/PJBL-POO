@@ -31,6 +31,7 @@ public class AdmMenuScreen extends JFrame {
         userPanel = new JPanel();
         userPanel.setLayout(new BoxLayout(userPanel, BoxLayout.Y_AXIS)); // Adicionar BoxLayout
         userPanel.setBackground(new Color(37, 38, 37));
+        userPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
 
         JButton btBack = new JButton("Voltar");
         TextPanel admTitle = new TextPanel("Menu do ADM");
@@ -40,8 +41,11 @@ public class AdmMenuScreen extends JFrame {
         topPanel.add(btBackPanel);
         topPanel.add(admTitle);
 
+        JScrollPane scrollPane = new JScrollPane(userPanel);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+
         mainPanel.add(topPanel, BorderLayout.NORTH);
-        mainPanel.add(userPanel, BorderLayout.CENTER);
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
 
         this.add(mainPanel);
         this.setVisible(true);
@@ -91,18 +95,25 @@ public class AdmMenuScreen extends JFrame {
         userPanel.add(lbRegistered);
 
         for (User currentUser : userList) {
-            JPanel currentPanel = new JPanel();
+            JPanel currentPanel = new JPanel(new BorderLayout());
             currentPanel.setBackground(new Color(37, 38, 37));
 
             JLabel lbUsername = new JLabel();
             lbUsername.setForeground(Color.WHITE);
+            lbUsername.setText(currentUser.getUsername());
+            lbUsername.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+            JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+            buttonPanel.setBackground(new Color(37, 38, 37));
 
             btEdit = new JButton("Editar");
             btDelete = new JButton("Excluir");
-            lbUsername.setText(currentUser.getUsername());
-            currentPanel.add(lbUsername);
-            currentPanel.add(btEdit);
-            currentPanel.add(btDelete);
+
+            buttonPanel.add(btEdit);
+            buttonPanel.add(btDelete);
+
+            currentPanel.add(lbUsername, BorderLayout.WEST);
+            currentPanel.add(buttonPanel, BorderLayout.EAST);
             userPanel.add(currentPanel);
 
             btEdit.addActionListener(new ActionListener() {

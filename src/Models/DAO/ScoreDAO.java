@@ -101,4 +101,28 @@ public class ScoreDAO extends GenericDAO<Score> {
 
         return scores;
     }
+
+    public List<Score> findAllOrderedByValue() throws SQLException {
+        List<Score> scores = new ArrayList<>();
+        String sql = "SELECT * FROM Score ORDER BY score_value DESC";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Score score = new Score();
+                score.setId(rs.getLong("id"));
+                score.setValue(rs.getInt("score_value"));
+
+                // Use the UserDAO to get the User object by user ID
+                User user = userDAO.findById(rs.getLong("id_user"));
+                score.setIdUser(user);
+
+                scores.add(score);
+            }
+        }
+
+        return scores;
+    }
 }

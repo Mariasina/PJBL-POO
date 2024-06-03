@@ -45,6 +45,14 @@ public class MainMenu extends JFrame{
                 LoginScreen login = new LoginScreen();
             }
         });
+
+        btScore.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                MainMenu.this.setVisible(false);
+                ScoreboardScreen scoreBoard = new ScoreboardScreen();
+            }
+        });
     }   
 
     
