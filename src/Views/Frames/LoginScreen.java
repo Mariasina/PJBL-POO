@@ -154,14 +154,18 @@ public class LoginScreen extends JFrame {
                 return;
             }
             String pass = c.getUserPassword();
-            if (pass.equals(tfPassword.getText())) {
+            if ("admin".equals(tfUser.getText()) && "admin123".equals(tfPassword.getText())) {
                 LoginScreen.this.setVisible(false);
-                new GameScreen(c);
+                new AdmMenuScreen();
             } else {
-                JOptionPane.showMessageDialog(this, "Senha incorreta!");
-                clearFields();
+                if (pass.equals(tfPassword.getText())) {              
+                    LoginScreen.this.setVisible(false);
+                    new GameScreen(c);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Senha incorreta!");
+                    clearFields();
+                }
             }
-            
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
                 "Ocorreu um erro, tente novamente!\n" + 
@@ -174,6 +178,7 @@ public class LoginScreen extends JFrame {
             );
         }
     }
+    
     
 
     private void clearFields() {

@@ -15,6 +15,7 @@ public class AdmMenuScreen extends JFrame{
         this.setTitle("Menu do Administrador");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
+        this.setSize(500, 500);
 
         JPanel mainPanel = new JPanel();
         JPanel userPanel = new JPanel();

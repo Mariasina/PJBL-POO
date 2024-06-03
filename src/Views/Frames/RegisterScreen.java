@@ -129,7 +129,7 @@ public class RegisterScreen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 onClickRegister();
-                RegisterScreen.this.setVisible(false);
+                
             }
         });
     }

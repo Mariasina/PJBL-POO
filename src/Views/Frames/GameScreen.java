@@ -1,13 +1,12 @@
 package Views.Frames;
 
+import Models.Entity.User;
+import Views.Components.Food;
+import Views.Components.Snake;
+import Views.Components.TextPanel;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-
-import Views.Components.Food;
-import Views.Components.Snake;
-import Models.Entity.User;
-import Views.Components.TextPanel;
 
 public class GameScreen extends JFrame implements KeyListener {
     private int score;
@@ -17,8 +16,10 @@ public class GameScreen extends JFrame implements KeyListener {
     private Food food;
     private Timer timer;
     private TextPanel scorePanel;
+    private User user;
 
     public GameScreen(User user) {
+        this.user = user;
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(1000, 700);
         getContentPane().setBackground(new Color(117, 237, 92));
@@ -60,7 +61,7 @@ public class GameScreen extends JFrame implements KeyListener {
                     
                         GameScreen.this.setVisible(false);
                         timer.stop();
-                        AdmMenuScreen adm = new AdmMenuScreen();
+                        GameOverScreen gameOver = new GameOverScreen(user, score);
                  }
 
                 System.out.println("Score: " + score);
@@ -69,7 +70,7 @@ public class GameScreen extends JFrame implements KeyListener {
             }
         };
 
-        timer = new Timer(50, gameLoop);
+        timer = new Timer(20, gameLoop);
         timer.start();
         this.addKeyListener(this);
         this.setFocusable(true);
