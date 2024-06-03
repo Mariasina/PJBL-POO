@@ -1,85 +1,129 @@
 package Views.Frames;
 
+import Controllers.UserController;
+import Models.Entity.User;
+import Views.Components.TextPanel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.List;
 import javax.swing.*;
 
-import Models.Entity.User;
-
-public class AdmMenuScreen extends JFrame{
+public class AdmMenuScreen extends JFrame {
     private List<User> userList;
+    private JButton btEdit;
+    private JButton btDelete;
+    private JPanel userPanel;
 
-
-    public AdmMenuScreen(){
+    public AdmMenuScreen() {
         this.setTitle("Menu do Administrador");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setVisible(true);
         this.setSize(500, 500);
 
-        JPanel mainPanel = new JPanel();
-        JPanel userPanel = new JPanel();
-
-        JButton btAdd = new JButton("Adicionar usuário");
-        JButton btEdit = new JButton("Editar usuário");
-        JButton btDelete = new JButton("Excluir usuário");
-        JButton btSearch = new JButton("Procurar usuário");
-        JButton btPlay = new JButton("Jogar jogo");
-        JLabel lbRegistered = new JLabel("Usuários cadastrados:");
-
-        mainPanel.add(btAdd);
-        mainPanel.add(btEdit);
-        mainPanel.add(btDelete);
-        mainPanel.add(btSearch);
-        mainPanel.add(btPlay);
-
-        userPanel.add(lbRegistered);
-
-        // for (User currentUser : userList) {
-        //     JLabel lbUsername = new JLabel();
-        //     lbUsername.setText(currentUser.getUsername());
-        //     userPanel.add(lbUsername); 
-        // }
-
-        mainPanel.add(userPanel);
-
-        btAdd.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e){
-                AdmMenuScreen.this.setVisible(false);
-                RegisterScreen register = new RegisterScreen();
-            }
-        });
-
-        btEdit.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e){
-                AdmMenuScreen.this.setVisible(false);
-                EditScreen edit = new EditScreen();
-            }
-        });
-
-        btDelete.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e){
-                AdmMenuScreen.this.setVisible(false);
-                DeleteScreen delete = new DeleteScreen();
-            }
-        });
-
-        btPlay.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e){
-                AdmMenuScreen.this.setVisible(false);
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        JPanel btBackPanel = new JPanel(); // Painel para alinhar btBack à esquerda
+        btBackPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); // Alinha à esquerda
+        btBackPanel.setBackground(new Color(37, 38, 37));
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS)); // Adicionar BoxLayout
                 
-            }
-        });
+        userPanel = new JPanel();
+        userPanel.setLayout(new BoxLayout(userPanel, BoxLayout.Y_AXIS)); // Adicionar BoxLayout
+        userPanel.setBackground(new Color(37, 38, 37));
+
+        JButton btBack = new JButton("Voltar");
+        TextPanel admTitle = new TextPanel("Menu do ADM");
+
+        btBackPanel.add(btBack);
+
+        topPanel.add(btBackPanel);
+        topPanel.add(admTitle);
+
+        mainPanel.add(topPanel, BorderLayout.NORTH);
+        mainPanel.add(userPanel, BorderLayout.CENTER);
 
         this.add(mainPanel);
-        this.pack();
-        
+        this.setVisible(true);
 
+        refreshUserList(); // Chamar refreshUserList após inicializar userPanel
 
+        btBack.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AdmMenuScreen.this.setVisible(false);
+                new MainMenu();
+            }
+        });
     }
-    
+
+    private void onClickDelete(User user) {
+        UserController userC = new UserController();
+        try {
+            Long id = user.getId();
+            userC.delete(id);
+            JOptionPane.showMessageDialog(this, "Usuário deletado!");
+            refreshUserList();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this,
+                "Ocorreu um erro, tente novamente!\n" +
+                e.getLocalizedMessage()
+            );
+        } catch (NullPointerException e){
+            JOptionPane.showMessageDialog(this,
+                "Usuário não localizado ou não existe!\n" +
+                e.getLocalizedMessage()
+            );
+        }
+    }
+
+    private void refreshUserList() {
+        // Atualizar a lista de usuários
+        userList = new UserController().listUsers();
+
+        // Limpar o painel de usuários
+        userPanel.removeAll();
+
+        // Adicionar o rótulo "Usuários cadastrados:"
+        JLabel lbRegistered = new JLabel("Usuários cadastrados:");
+        lbRegistered.setForeground(Color.WHITE);
+        lbRegistered.setAlignmentX(Component.CENTER_ALIGNMENT);
+        userPanel.add(lbRegistered);
+
+        for (User currentUser : userList) {
+            JPanel currentPanel = new JPanel();
+            currentPanel.setBackground(new Color(37, 38, 37));
+
+            JLabel lbUsername = new JLabel();
+            lbUsername.setForeground(Color.WHITE);
+
+            btEdit = new JButton("Editar");
+            btDelete = new JButton("Excluir");
+            lbUsername.setText(currentUser.getUsername());
+            currentPanel.add(lbUsername);
+            currentPanel.add(btEdit);
+            currentPanel.add(btDelete);
+            userPanel.add(currentPanel);
+
+            btEdit.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    AdmMenuScreen.this.setVisible(false);
+                    EditScreen edit = new EditScreen();
+                }
+            });
+
+            btDelete.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    onClickDelete(currentUser);
+                }
+            });
+
+        }
+
+        // Revalidar e repintar o painel de usuários
+        userPanel.revalidate();
+        userPanel.repaint();
+    }
 }

@@ -24,7 +24,6 @@ public class DeleteScreen extends JFrame{
         JButton btDelete = new JButton("Deletar");
         JButton btBack = new JButton("Voltar");
 
-
         tfUser = new JTextField("", 20);
 
         mainPanel.add(btBack);
@@ -49,9 +48,7 @@ public class DeleteScreen extends JFrame{
 
         this.add(mainPanel);
         this.pack();
-        this.setVisible(true);
-
-        
+        this.setVisible(true);     
     }
 
     private void onClickDelete() {

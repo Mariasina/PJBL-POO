@@ -69,7 +69,6 @@ public class GameOverScreen extends JFrame {
         ScoreController sc = new ScoreController();
         try {
             sc.register(score, user);
-            JOptionPane.showMessageDialog(this, "Score cadastrado!");
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this,
                 "Nao foi possivel salvar usuário!\n" +

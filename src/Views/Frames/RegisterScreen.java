@@ -1,25 +1,19 @@
 package Views.Frames;
 
 import Controllers.UserController;
-import Models.Entity.User;
 import Views.Components.TextPanel;
-
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.util.List;
+import javax.swing.*;
 
 public class RegisterScreen extends JFrame {
     private JTextField tfUser;
     private JTextField tfPassword;
-    private List<User> userList;
-    private JPanel userPanel;
 
     public RegisterScreen() {
-        userList = new UserController().listUsers();
         this.setTitle("Login");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(500, 500);
@@ -27,7 +21,6 @@ public class RegisterScreen extends JFrame {
         // Painéis principais
         JPanel mainPanel = new JPanel(new BorderLayout());
         JPanel addPanel = new JPanel();
-        userPanel = new JPanel();
         JPanel buttonsPanel = new JPanel(new BorderLayout()); // Layout para botões
         JPanel btAddPanel = new JPanel(); // Painel para centralizar btAdd
         JPanel btBackPanel = new JPanel(); // Painel para alinhar btBack à esquerda
@@ -40,7 +33,6 @@ public class RegisterScreen extends JFrame {
         tfPassword = new JTextField("", 20);
         JButton btAdd = new JButton("Adicionar");
         JButton btBack = new JButton("Voltar");
-        JLabel lbRegistered = new JLabel("Usuários cadastrados:");
         TextPanel title = new TextPanel("Cadastro");
 
         lbUser.setForeground(Color.WHITE);
@@ -92,24 +84,11 @@ public class RegisterScreen extends JFrame {
         addPanel.add(formPanel);
         addPanel.add(buttonsPanel);
 
-        // Configurações do painel de usuários registrados
-        userPanel.setLayout(new BoxLayout(userPanel, BoxLayout.Y_AXIS));
-        userPanel.add(lbRegistered);
-
-        // Adicionar usuários ao painel de usuários registrados
-        for (User currentUser : userList) {
-            JLabel lbUsername = new JLabel();
-            lbUsername.setText(currentUser.getUsername());
-            userPanel.add(lbUsername);
-        }
-
         // Adicionar espaçamento ao painel de botões
         addPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        userPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // Adicionar painéis ao painel principal
-        mainPanel.add(addPanel, BorderLayout.NORTH);
-        mainPanel.add(userPanel, BorderLayout.SOUTH);
+        mainPanel.add(addPanel, BorderLayout.CENTER);
 
         // Adicionar painel principal ao frame
         this.add(mainPanel);
@@ -129,7 +108,6 @@ public class RegisterScreen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 onClickRegister();
-                
             }
         });
     }
@@ -140,17 +118,17 @@ public class RegisterScreen extends JFrame {
             cc.register(tfUser.getText(), tfPassword.getText());
             JOptionPane.showMessageDialog(this, "Usuário cadastrado!");
             clearFields();
-            userList = new UserController().listUsers();
-            refreshUserList();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this,
-                "Nao foi possivel salvar usuário!" +
-                e.getLocalizedMessage()
-            );
+            if (e.getMessage().contains("Username already exists")) {
+                JOptionPane.showMessageDialog(this, "Nome de usuário já existe. Escolha um nome diferente.");
+            } else {
+                JOptionPane.showMessageDialog(this,
+                    "Não foi possível salvar usuário! " + e.getLocalizedMessage()
+                );
+            }
         } catch (ParseException e) {
             JOptionPane.showMessageDialog(this,
-                "Data possui formato inválido!\n" +
-                e.getLocalizedMessage()
+                "Data possui formato inválido!\n" + e.getLocalizedMessage()
             );
         }
     }
@@ -158,16 +136,5 @@ public class RegisterScreen extends JFrame {
     private void clearFields() {
         tfUser.setText("");
         tfPassword.setText("");
-    }
-
-    private void refreshUserList() {
-        userPanel.removeAll();
-        userPanel.add(new JLabel("Usuários cadastrados:"));
-        for (User currentUser : userList) {
-            JLabel lbUsername = new JLabel(currentUser.getUsername());
-            userPanel.add(lbUsername);
-        }
-        userPanel.revalidate();
-        userPanel.repaint();
     }
 }
