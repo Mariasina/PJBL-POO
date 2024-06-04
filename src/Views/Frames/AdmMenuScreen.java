@@ -120,7 +120,7 @@ public class AdmMenuScreen extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     AdmMenuScreen.this.setVisible(false);
-                    EditScreen edit = new EditScreen();
+                    EditScreen edit = new EditScreen(currentUser);
                 }
             });
 

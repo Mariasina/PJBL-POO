@@ -35,7 +35,7 @@ public class GameScreen extends JFrame implements KeyListener {
         food = new Food();
         snake = new Snake(300, 200);
         snake.setBounds(0, 0, 1000, 700);
-        food.setBounds(0, 0, 1000, 700);
+        food.setBounds(0, 0, 800, 500);
 
         // Inicializa scorePanel com valor inicial
         scorePanel = new TextPanel("Score: 0");
