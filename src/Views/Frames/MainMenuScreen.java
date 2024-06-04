@@ -6,16 +6,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
-public class MainMenu extends JFrame{
+public class MainMenuScreen extends JFrame{
 
-    public MainMenu(){
+    public MainMenuScreen(){
         this.setTitle("Snake Game");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
-        this.setSize(500, 500);
+        this.setSize(600, 600);
 
+        // Configuração dos Painéis 
         JPanel mainPanel = new JPanel(new BorderLayout());
         JPanel buttonsPanel = new JPanel();
+
+        // Configuração dos demais elementos 
         TextPanel title = new TextPanel("SNAKE");
         JButton btPlay = new JButton("Jogar");
         JButton btScore = new JButton("Scoreboard");
@@ -41,7 +44,7 @@ public class MainMenu extends JFrame{
         btPlay.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                MainMenu.this.setVisible(false);
+                MainMenuScreen.this.setVisible(false);
                 LoginScreen login = new LoginScreen();
             }
         });
@@ -49,7 +52,7 @@ public class MainMenu extends JFrame{
         btScore.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                MainMenu.this.setVisible(false);
+                MainMenuScreen.this.setVisible(false);
                 ScoreboardScreen scoreBoard = new ScoreboardScreen();
             }
         });

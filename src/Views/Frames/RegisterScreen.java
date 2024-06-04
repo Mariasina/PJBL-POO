@@ -1,6 +1,7 @@
 package Views.Frames;
 
 import Controllers.UserController;
+import Models.Exceptions.InvalidEntityException;
 import Views.Components.TextPanel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -16,17 +17,17 @@ public class RegisterScreen extends JFrame {
     public RegisterScreen() {
         this.setTitle("Login");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(500, 500);
+        this.setSize(600, 600);
 
-        // Painéis principais
+        // Configuração dos Painéis 
         JPanel mainPanel = new JPanel(new BorderLayout());
         JPanel addPanel = new JPanel();
-        JPanel buttonsPanel = new JPanel(new BorderLayout()); // Layout para botões
-        JPanel btAddPanel = new JPanel(); // Painel para centralizar btAdd
-        JPanel btBackPanel = new JPanel(); // Painel para alinhar btBack à esquerda
-        JPanel formPanel = new JPanel(); // Painel para alinhar os campos do formulário à esquerda
+        JPanel buttonsPanel = new JPanel(new BorderLayout()); 
+        JPanel btAddPanel = new JPanel(); 
+        JPanel btBackPanel = new JPanel(); 
+        JPanel formPanel = new JPanel(); 
 
-        // Componentes de texto e botões
+        // Configuração dos demais elementos 
         JLabel lbUser = new JLabel("Username:");
         tfUser = new JTextField("", 20);
         JLabel lbPassword = new JLabel("Senha:");
@@ -75,7 +76,6 @@ public class RegisterScreen extends JFrame {
 
         formPanel.setBackground(new Color(37, 38, 37));
 
-        // Layout e configurações do painel de adição
         addPanel.setLayout(new BoxLayout(addPanel, BoxLayout.Y_AXIS));
         addPanel.setBackground(new Color(37, 38, 37));
 
@@ -84,13 +84,10 @@ public class RegisterScreen extends JFrame {
         addPanel.add(formPanel);
         addPanel.add(buttonsPanel);
 
-        // Adicionar espaçamento ao painel de botões
         addPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Adicionar painéis ao painel principal
         mainPanel.add(addPanel, BorderLayout.CENTER);
 
-        // Adicionar painel principal ao frame
         this.add(mainPanel);
         this.setVisible(true);
 
@@ -99,7 +96,7 @@ public class RegisterScreen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 RegisterScreen.this.setVisible(false);
-                new MainMenu();
+                new MainMenuScreen();
             }
         });
 
@@ -130,6 +127,8 @@ public class RegisterScreen extends JFrame {
             JOptionPane.showMessageDialog(this,
                 "Data possui formato inválido!\n" + e.getLocalizedMessage()
             );
+        } catch (InvalidEntityException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
 

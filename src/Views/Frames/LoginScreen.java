@@ -2,6 +2,7 @@ package Views.Frames;
 
 import Controllers.UserController;
 import Models.Entity.User;
+import Models.Exceptions.InvalidEntityException;
 import Views.Components.TextPanel;
 
 import javax.swing.*;
@@ -16,53 +17,46 @@ import java.util.List;
 public class LoginScreen extends JFrame {
     private JTextField tfUser;
     private JTextField tfPassword;
-    private JPanel userPanel;
-
+    
     public LoginScreen() {
         this.setTitle("Login");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(500, 500);
-
-        // Painéis principais
+        this.setSize(600, 600);
+        
+        // Configuração dos Painéis 
         JPanel mainPanel = new JPanel(new BorderLayout());
         JPanel addPanel = new JPanel();
-        userPanel = new JPanel();
-        JPanel buttonsPanel = new JPanel(new BorderLayout()); // Layout para botões
-        JPanel btAddPanel = new JPanel(); // Painel para centralizar btAdd
-        JPanel btBackPanel = new JPanel(); // Painel para alinhar btBack à esquerda
-        JPanel formPanel = new JPanel(); // Painel para alinhar os campos do formulário à esquerda
-
-        // Componentes de texto e botões
-        JLabel lbUser = new JLabel("Username:");
-        tfUser = new JTextField("", 20);
-        JLabel lbPassword = new JLabel("Senha:");
-        tfPassword = new JTextField("", 20);
-        JButton btLogin = new JButton("Entrar");
-        JButton btBack = new JButton("Voltar");
-        JLabel lbRegistered = new JLabel("Usuários cadastrados:");
-        TextPanel title = new TextPanel("Login");
-        JLabel lbRegister = new JLabel("Ainda não possuí um usuário?");
-        JButton btRegister = new JButton("Cadastrar");
-
-        lbUser.setForeground(Color.WHITE);
-        lbPassword.setForeground(Color.WHITE);
-        lbRegister.setForeground(Color.WHITE);
-
-        // Configuração do painel de botões
+        JPanel buttonsPanel = new JPanel(new BorderLayout());
+        JPanel btAddPanel = new JPanel(); 
         btAddPanel.setLayout(new BoxLayout(btAddPanel, BoxLayout.Y_AXIS));
-        btBackPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); // Alinha à esquerda
-
-        // Adicionar botões aos seus respectivos painéis
-        btLogin.setAlignmentX(Component.CENTER_ALIGNMENT);
-        lbRegister.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btRegister.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        btAddPanel.add(btLogin);
         btAddPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 70, 10));
         btAddPanel.setBackground(new Color(37, 38, 37));
+        JPanel btBackPanel = new JPanel();
+        btBackPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        btBackPanel.setBackground(new Color(37, 38, 37));
+        JPanel formPanel = new JPanel(); 
+        
+        // Configuração dos demais elementos 
+        JLabel lbUser = new JLabel("Username:");
+        lbUser.setForeground(Color.WHITE);
+        tfUser = new JTextField("", 20);
+        JLabel lbPassword = new JLabel("Senha:");
+        lbPassword.setForeground(Color.WHITE);
+        tfPassword = new JTextField("", 20);
+        JButton btLogin = new JButton("Entrar");
+        btLogin.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JButton btBack = new JButton("Voltar");
+        TextPanel title = new TextPanel("Login");
+        JLabel lbRegister = new JLabel("Ainda não possuí um usuário?");
+        lbRegister.setForeground(Color.WHITE);
+        lbRegister.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JButton btRegister = new JButton("Cadastrar");
+        btRegister.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Adicionar botões aos seus respectivos painéis
+        btAddPanel.add(btLogin);
 
         btBackPanel.add(btBack);
-        btBackPanel.setBackground(new Color(37, 38, 37));
 
         buttonsPanel.add(btAddPanel, BorderLayout.CENTER);
 
@@ -88,7 +82,6 @@ public class LoginScreen extends JFrame {
 
         formPanel.setBackground(new Color(37, 38, 37));
 
-        // Layout e configurações do painel de adição
         addPanel.setLayout(new BoxLayout(addPanel, BoxLayout.Y_AXIS));
         addPanel.setBackground(new Color(37, 38, 37));
 
@@ -99,19 +92,10 @@ public class LoginScreen extends JFrame {
         addPanel.add(lbRegister);
         addPanel.add(btRegister);
 
-        // Configurações do painel de usuários registrados
-        userPanel.setLayout(new BoxLayout(userPanel, BoxLayout.Y_AXIS));
-        userPanel.add(lbRegistered);
-
-        // Adicionar espaçamento ao painel de botões
         addPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        userPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Adicionar painéis ao painel principal
-        mainPanel.add(addPanel, BorderLayout.NORTH);
-        mainPanel.add(userPanel, BorderLayout.SOUTH);
+        mainPanel.add(addPanel, BorderLayout.CENTER);
 
-        // Adicionar painel principal ao frame
         this.add(mainPanel);
         this.setVisible(true);
 
@@ -120,7 +104,7 @@ public class LoginScreen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 LoginScreen.this.setVisible(false);
-                new MainMenu();
+                new MainMenuScreen();
             }
         });
 
@@ -176,10 +160,10 @@ public class LoginScreen extends JFrame {
                 "Contato não localizado ou não existe!\n" + 
                 e.getLocalizedMessage()
             );
+        }  catch (InvalidEntityException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
-    }
-    
-    
+    }    
 
     private void clearFields() {
         tfPassword.setText("");

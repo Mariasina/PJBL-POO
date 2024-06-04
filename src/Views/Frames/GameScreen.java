@@ -10,7 +10,7 @@ import javax.swing.*;
 
 public class GameScreen extends JFrame implements KeyListener {
     private int score;
-    private int snake_movX = 0; // Inicialmente, a cobra não se move
+    private int snake_movX = 0;
     private int snake_movY = 0;
     private Snake snake;
     private Food food;
@@ -37,14 +37,14 @@ public class GameScreen extends JFrame implements KeyListener {
         snake.setBounds(0, 0, 1000, 700);
         food.setBounds(0, 0, 800, 500);
 
-        // Inicializa scorePanel com valor inicial
         scorePanel = new TextPanel("Score: 0");
-        scorePanel.setBounds(10, 10, 200, 30); // Define o tamanho e posição do painel de pontuação
+        scorePanel.setBounds(10, 10, 200, 30); 
 
         this.add(food);
         this.add(snake);
         this.add(scorePanel);
 
+        // Actions com o Timer para que o jogo atualize sempre
         ActionListener gameLoop = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 snake.setSnakeX(snake.getSnakeX() + snake_movX);
@@ -65,7 +65,7 @@ public class GameScreen extends JFrame implements KeyListener {
                  }
 
                 System.out.println("Score: " + score);
-                scorePanel.setText("Score: " + score); // Atualiza o texto do painel de pontuação
+                scorePanel.setText("Score: " + score); 
                 scorePanel.repaint();
             }
         };
@@ -76,7 +76,6 @@ public class GameScreen extends JFrame implements KeyListener {
         this.setFocusable(true);
         this.requestFocusInWindow();
         
-        // Adicionar um MouseListener para recuperar o foco quando a janela for clicada
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

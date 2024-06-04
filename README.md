@@ -1,18 +1,18 @@
-## Getting Started
+Esse projeto foi construido para o MySQL, não foi testada a compatibilidade com outros softwares de banco de dados
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+create database poo_pjbl;
+use poo_pjbl;
 
-## Folder Structure
+create table User(
+	id int primary key auto_increment not null,
+    username varchar(200),
+    user_password varchar(100)
+);
 
-The workspace contains two folders by default, where:
-
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
-
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+create table Score(
+	id int primary key auto_increment not null,
+    score_value int,
+    id_user int,
+    
+    foreign key (id_user) references user(id) on delete cascade on update cascade
+);

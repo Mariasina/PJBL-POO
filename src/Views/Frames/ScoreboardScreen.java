@@ -11,34 +11,32 @@ public class ScoreboardScreen extends JFrame {
     private List<Score> scoreList;
 
     public ScoreboardScreen() {
-        // Busca a lista de scores ordenados
         scoreList = new ScoreController().listScores();
 
         this.setTitle("Scoreboard");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
-        this.setSize(500, 500);
+        this.setSize(600, 600);
 
-        JPanel btBackPanel = new JPanel(); // Painel para alinhar btBack à esquerda
+        // Configuração dos Painéis 
+        JPanel btBackPanel = new JPanel(); 
         btBackPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         JPanel mainPanel = new JPanel(new BorderLayout());
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
         JPanel scorePanel = new JPanel(new GridBagLayout());
         scorePanel.setBackground(new Color(37, 38, 37));
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 30, 5, 30);  // Ajustar insets para adicionar mais espaço entre colunas
 
+        // Configuração dos demais elementos 
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 30, 5, 30);  
         TextPanel scoreboard = new TextPanel("Scoreboard");
         JButton btBack = new JButton("Voltar");
-
         JLabel lbUserTitle = new JLabel("Usuário:");
         lbUserTitle.setForeground(Color.WHITE);
-
         JLabel lbScoreTitle = new JLabel("Score:");
         lbScoreTitle.setForeground(Color.WHITE);
 
-        // Adicionar títulos ao painel de score
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
@@ -49,7 +47,6 @@ public class ScoreboardScreen extends JFrame {
         gbc.anchor = GridBagConstraints.EAST;
         scorePanel.add(lbScoreTitle, gbc);
 
-        // Adiciona os scores no painel
         int row = 1;
         for (Score currentScore : scoreList) {
             JLabel lbUsername = new JLabel(currentScore.getIdUser().getUsername());
@@ -77,17 +74,17 @@ public class ScoreboardScreen extends JFrame {
         topPanel.add(scoreboard);
 
         JScrollPane scrollPane = new JScrollPane(scorePanel);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder()); // Remove a borda do JScrollPane
+        scrollPane.setBorder(BorderFactory.createEmptyBorder()); 
 
         mainPanel.add(topPanel, BorderLayout.NORTH);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
         this.add(mainPanel);
 
-        // ActionListener para o botão Voltar
+   
         btBack.addActionListener(e -> {
             ScoreboardScreen.this.setVisible(false);
-            new MainMenu(); // Certifique-se de que existe uma tela MainMenu para voltar
+            new MainMenuScreen(); 
         });
     }
 }

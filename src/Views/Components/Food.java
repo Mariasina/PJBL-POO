@@ -9,13 +9,14 @@ public class Food extends JComponent{
     private int y;
     private int points;
     private int size;
+    private final int MARGIN = 20; // Define a margem mínima de distância das bordas
 
     public Food(){
         Random generator = new Random();
-        this.x = (generator.nextInt(800 - size)) - 10;
-        this.y = (generator.nextInt(500 - size)) - 10;
-        this.points = 5;
         this.size = 20;
+        this.points = 5;
+        this.x = generator.nextInt(800 - size - 2 * MARGIN) + MARGIN;
+        this.y = generator.nextInt(500 - size - 2 * MARGIN) + MARGIN;
 
         System.out.println(x);
         System.out.println(y);
@@ -23,8 +24,8 @@ public class Food extends JComponent{
 
     public void respawn(){
         Random generator = new Random();
-        this.x =(generator.nextInt(800 - size)) - 10;
-        this.y = (generator.nextInt(500 - size)) - 10;
+        this.x = generator.nextInt(800 - size - 2 * MARGIN) + MARGIN;
+        this.y = generator.nextInt(500 - size - 2 * MARGIN) + MARGIN;
         repaint();
     }
 
